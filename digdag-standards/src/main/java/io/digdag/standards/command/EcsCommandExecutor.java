@@ -270,7 +270,7 @@ public class EcsCommandExecutor
             final CommandContext commandContext,
             final EcsClient client,
             final ObjectNode previousStatus)
-            throws IOException
+            throws IOException, InterruptedException
     {
         final String cluster = previousStatus.get("cluster_name").asText();
         final String taskArn = previousStatus.get("task_arn").asText();
@@ -302,6 +302,7 @@ public class EcsCommandExecutor
                 if (previousExecutorStatus.get("logging_finished") != null) {
                     break;
                 }
+                Thread.sleep(1000);
             } while (Instant.now().getEpochSecond() < timeout);
 
             final String outputArchivePathName = "archive-output.tar.gz";
